@@ -10,6 +10,7 @@
     <tr>
         <th scope="col">#</th>
         <th scope="col">Title</th>
+        <th scope="col">Genre</th>
     </tr>
     </thead>
     <tbody>
@@ -18,6 +19,7 @@
         <tr>
             <th scope="row">@movie.Id</th>
             <td>@Html.ActionLink(movie.Name, "Details", "Movies", new {movie.Id}, null)</td>
+            <td>@movie.Genre.Name</td>
         </tr> 
     }
     </tbody>
