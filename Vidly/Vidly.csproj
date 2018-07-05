@@ -188,8 +188,13 @@
     <Compile Include="Migrations\201807050922473_AddBirthdayToCustomer.Designer.cs">
       <DependentUpon>201807050922473_AddBirthdayToCustomer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807050954559_AddGenreModel.cs" />
+    <Compile Include="Migrations\201807050954559_AddGenreModel.Designer.cs">
+      <DependentUpon>201807050954559_AddGenreModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\MembershipType.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Models\VidlyDBContext.cs" />
@@ -277,6 +282,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807050922473_AddBirthdayToCustomer.resx">
       <DependentUpon>201807050922473_AddBirthdayToCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807050954559_AddGenreModel.resx">
+      <DependentUpon>201807050954559_AddGenreModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
