@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using Vidly.Models;
@@ -31,21 +30,50 @@ namespace Vidly.Controllers
         public ActionResult New()
         {
             var membershipTypes = _context.MembershipTypes.ToList();
-            var viewModel = new NewCustomerViewModel
+            var viewModel = new CustomerFormViewModel
             {
                 MembershipTypes = membershipTypes
             };
 
-            return View(viewModel);
+            return View("CustomerForm", viewModel);
         }
 
         [HttpPost]
-        public ActionResult Create(Customer customer)
+        public ActionResult Save(Customer customer)
         {
-            _context.Customers.Add(customer);
-            _context.SaveChanges();
+            if (customer.Id.Equals(0))
+            {
+                _context.Customers.Add(customer);  
+            }
 
+            else
+            {
+                var _customer = _context.Customers.Single(c => c.Id == customer.Id);
+                _customer.Name = customer.Name;
+                _customer.Birthdate = customer.Birthdate;
+                _customer.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
+                _customer.MembershipTypeId = customer.MembershipTypeId;
+
+            }
+
+            _context.SaveChanges();
             return RedirectToAction("Index", "Customers");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var customer = _context.Customers.SingleOrDefault(c => c.Id == id);
+
+            if (customer == null)
+                return HttpNotFound();
+
+            var viewModel = new CustomerFormViewModel()
+            {
+                Customer = customer,
+                MembershipTypes = _context.MembershipTypes.ToList()
+            };
+
+            return View("CustomerForm", viewModel);
         }
 
         public ActionResult Details(int id)

@@ -15,7 +15,7 @@
         {
             <tr>
                 <th scope="row">@customer.Id</th>
-                <td>@Html.ActionLink(customer.Name, "Details", "Customers", new {customer.Id}, null )</td>
+                <td>@Html.ActionLink(customer.Name, "Edit", "Customers", new {customer.Id}, null )</td>
                 <td>@customer.MembershipType.Name</td>
             </tr>
         }
