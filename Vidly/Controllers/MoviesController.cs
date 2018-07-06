@@ -1,7 +1,9 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using Vidly.Models;
+using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
@@ -19,11 +21,29 @@ namespace Vidly.Controllers
             _context.Dispose();
         }
 
-        // GET: Movies
         public ActionResult Index()
         {
             var movies = _context.Movies.Include(m => m.Genre).ToList();
             return View(movies);
+        }
+
+        public ActionResult New()
+        {
+            var movieFormViewModel = new MovieFormViewModel()
+            {
+                Genres = _context.Genres.ToList()
+            };
+
+            return View("MovieForm", movieFormViewModel);
+        }
+
+        public ActionResult Save(Movie movie)
+        {
+            movie.DateAddedToDatabase = DateTime.Now;
+            _context.Movies.Add(movie);
+
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Movies");
         }
 
         public ActionResult Details(int id)
