@@ -5,6 +5,7 @@
 }
 
 <h2>Movies</h2>
+@Html.ActionLink("New movie", "New", "Movies", new {@class ="btn btn-primary"})
 <table class="table table-striped">
     <thead>
     <tr>
@@ -18,7 +19,7 @@
     {
         <tr>
             <th scope="row">@movie.Id</th>
-            <td>@Html.ActionLink(movie.Name, "Details", "Movies", new {movie.Id}, null)</td>
+            <td>@Html.ActionLink(movie.Name, "Edit", "Movies", new {movie.Id}, null)</td>
             <td>@movie.Genre.Name</td>
         </tr> 
     }
