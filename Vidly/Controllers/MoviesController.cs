@@ -54,8 +54,20 @@ namespace Vidly.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(Movie movie)
         {
+            if (!ModelState.IsValid)
+            {
+                var movieFormViewModel = new MovieFormViewModel()
+                {
+                    Movie = movie,
+                    Genres = _context.Genres.ToList()
+                };
+
+                return View("MovieCreateForm", movieFormViewModel);
+            }
+
             movie.DateAddedToDatabase = DateTime.Now;
             _context.Movies.Add(movie);
 
@@ -64,8 +76,20 @@ namespace Vidly.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Modify(Movie movie)
         {
+            if (!ModelState.IsValid)
+            {
+                var movieFormViewModel = new MovieFormViewModel()
+                {
+                    Movie = movie,
+                    Genres = _context.Genres.ToList()
+                };
+
+                return View("MovieEditForm", movieFormViewModel);
+            }
+
             var _movie = _context.Movies.Single(m => m.Id == movie.Id);
             _movie.Name = movie.Name;
             _movie.GenreId = movie.GenreId;
