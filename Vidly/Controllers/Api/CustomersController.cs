@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
@@ -26,22 +27,22 @@ namespace Vidly.Controllers.Api
 
         //GET /api/customers/id
         [HttpGet]
-        public CustomerViewModel GetCustomer(int id)
+        public IHttpActionResult GetCustomer(int id)
         {
             var customer = _context.Customers.SingleOrDefault(c => c.Id == id);
 
-            if(customer == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+            if (customer == null)
+                return NotFound();
 
-            return Mapper.Map<Customer, CustomerViewModel>(customer);
+            return Ok(Mapper.Map<Customer, CustomerViewModel>(customer));
         }
 
         //POST /api/customers
         [HttpPost]
-        public CustomerViewModel CreateCustomer(CustomerViewModel customerVM)
+        public IHttpActionResult CreateCustomer(CustomerViewModel customerVM)
         {
-            if(!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            if (!ModelState.IsValid)
+                return BadRequest();
 
             var customer = Mapper.Map<CustomerViewModel, Customer>(customerVM);     
             _context.Customers.Add(customer);
@@ -49,7 +50,7 @@ namespace Vidly.Controllers.Api
 
             customerVM.Id = customer.Id;
 
-            return customerVM;
+            return Created(new Uri(Request.RequestUri + "/" + customerVM.Id), customerVM);
         }
 
         //PUT /api/customers/id
