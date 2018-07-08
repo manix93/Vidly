@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Net;
 using System.Web.Http;
+using AutoMapper;
 using Vidly.Models;
+using Vidly.ViewModels;
 
 namespace Vidly.Controllers.Api
 {
@@ -17,52 +19,52 @@ namespace Vidly.Controllers.Api
 
         //GET /api/customers
         [HttpGet]
-        public IEnumerable<Customer> GetCustomers()
+        public IEnumerable<CustomerViewModel> GetCustomers()
         {
-            return _context.Customers.ToList();
+            return _context.Customers.ToList().Select(Mapper.Map<Customer, CustomerViewModel>);
         }
 
         //GET /api/customers/id
         [HttpGet]
-        public Customer GetCustomer(int id)
+        public CustomerViewModel GetCustomer(int id)
         {
             var customer = _context.Customers.SingleOrDefault(c => c.Id == id);
 
             if(customer == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return customer;
+            return Mapper.Map<Customer, CustomerViewModel>(customer);
         }
 
         //POST /api/customers
         [HttpPost]
-        public Customer CreateCustomer(Customer customer)
+        public CustomerViewModel CreateCustomer(CustomerViewModel customerVM)
         {
             if(!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
+            var customer = Mapper.Map<CustomerViewModel, Customer>(customerVM);     
             _context.Customers.Add(customer);
             _context.SaveChanges();
 
-            return customer;
+            customerVM.Id = customer.Id;
+
+            return customerVM;
         }
 
         //PUT /api/customers/id
         [HttpPut]
-        public void UpdateCustomer(int id, Customer customer)
+        public void UpdateCustomer(int id, CustomerViewModel customerVM)
         {
             if(!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             var _customer = _context.Customers.SingleOrDefault(c => c.Id == id);
 
-            if(customer == null)
+            if(_customer == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            _customer.Name = customer.Name;
-            _customer.Birthdate = customer.Birthdate;
-            _customer.IsSubscribedToNewsletter = customer.IsSubscribedToNewsletter;
-            _customer.MembershipTypeId = customer.MembershipTypeId;
+            Mapper.Map<CustomerViewModel, Customer>(customerVM, _customer);
 
             _context.SaveChanges();
         }
