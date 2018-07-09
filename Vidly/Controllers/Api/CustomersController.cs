@@ -4,8 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using AutoMapper;
+using Vidly.DTOs;
 using Vidly.Models;
-using Vidly.ViewModels;
 
 namespace Vidly.Controllers.Api
 {
@@ -20,9 +20,9 @@ namespace Vidly.Controllers.Api
 
         //GET /api/customers
         [HttpGet]
-        public IEnumerable<CustomerViewModel> GetCustomers()
+        public IEnumerable<CustomerDTO> GetCustomers()
         {
-            return _context.Customers.ToList().Select(Mapper.Map<Customer, CustomerViewModel>);
+            return _context.Customers.ToList().Select(Mapper.Map<Customer, CustomerDTO>);
         }
 
         //GET /api/customers/id
@@ -34,17 +34,17 @@ namespace Vidly.Controllers.Api
             if (customer == null)
                 return NotFound();
 
-            return Ok(Mapper.Map<Customer, CustomerViewModel>(customer));
+            return Ok(Mapper.Map<Customer, CustomerDTO>(customer));
         }
 
         //POST /api/customers
         [HttpPost]
-        public IHttpActionResult CreateCustomer(CustomerViewModel customerVM)
+        public IHttpActionResult CreateCustomer(CustomerDTO customerVM)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            var customer = Mapper.Map<CustomerViewModel, Customer>(customerVM);     
+            var customer = Mapper.Map<CustomerDTO, Customer>(customerVM);     
             _context.Customers.Add(customer);
             _context.SaveChanges();
 
@@ -55,7 +55,7 @@ namespace Vidly.Controllers.Api
 
         //PUT /api/customers/id
         [HttpPut]
-        public void UpdateCustomer(int id, CustomerViewModel customerVM)
+        public void UpdateCustomer(int id, CustomerDTO customerVM)
         {
             if(!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -65,7 +65,7 @@ namespace Vidly.Controllers.Api
             if(_customer == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            Mapper.Map<CustomerViewModel, Customer>(customerVM, _customer);
+            Mapper.Map<CustomerDTO, Customer>(customerVM, _customer);
 
             _context.SaveChanges();
         }

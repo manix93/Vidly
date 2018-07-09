@@ -1,4 +1,5 @@
-﻿using Vidly.Models;
+﻿using Vidly.DTOs;
+using Vidly.Models;
 using Vidly.ViewModels;
 
 namespace Vidly.Utility.Profile
@@ -7,7 +8,7 @@ namespace Vidly.Utility.Profile
     {
         public MappingProfile()
         {
-            CreateMap<Customer, CustomerViewModel>()
+            CreateMap<Customer, CustomerDTO>()
                 .ReverseMap();
         }
     }
