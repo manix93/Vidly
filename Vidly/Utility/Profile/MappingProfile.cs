@@ -1,6 +1,5 @@
 ﻿using Vidly.DTOs;
 using Vidly.Models;
-using Vidly.ViewModels;
 
 namespace Vidly.Utility.Profile
 {
@@ -9,7 +8,12 @@ namespace Vidly.Utility.Profile
         public MappingProfile()
         {
             CreateMap<Customer, CustomerDTO>()
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(c => c.Id, opt => opt.Ignore());
+
+            CreateMap<Movie, MovieDTO>()
+                .ReverseMap()
+                .ForMember(m => m.Id, opt => opt.Ignore());
         }
     }
 }
